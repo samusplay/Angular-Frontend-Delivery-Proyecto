@@ -1,0 +1,41 @@
+<div class="min-h-screen flex">
+  
+  <div class="hidden lg:flex lg:w-1/2 relative items-center justify-center overflow-hidden bg-slate-900">
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-black opacity-90"></div>
+    
+    <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-indigo-600 opacity-20 blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
+
+    <div class="relative z-10 text-center px-12 text-white flex flex-col items-center">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 border border-white/20">
+        <svg class="w-8 h-8 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      </div>
+      <h1 class="text-4xl font-extrabold tracking-tight mb-4">Delivery Software</h1>
+      <p class="text-lg text-slate-300 max-w-md">
+        Plataforma para gestionar pedidos y catalogos
+      </p>
+    </div>
+  </div>
+
+  <div class="w-full lg:w-1/2 flex flex-col items-center justify-center bg-slate-50 px-6 py-12 sm:px-8">
+    <div class="w-full max-w-md space-y-8">
+      
+      <div class="lg:hidden text-center mb-8">
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Delivery Company</h2>
+      </div>
+
+      <div class="bg-white py-10 px-6 shadow-2xl shadow-slate-200/50 sm:rounded-3xl sm:px-12 border border-slate-100">
+        
+        <router-outlet />
+
+      </div>
+
+      <p class="text-center text-sm text-slate-500 mt-8 font-medium">
+        &copy; 2026 Delivery Company. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+
+</div>
