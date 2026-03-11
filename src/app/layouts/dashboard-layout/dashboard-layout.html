@@ -1,0 +1,68 @@
+<div class="flex h-screen bg-gray-50 font-sans">
+  
+  <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+    
+    <div class="h-16 flex items-center px-6 border-b border-gray-200">
+      <h2 class="text-xl font-bold text-indigo-600 tracking-tight">Delivery Software</h2>
+    </div>
+    
+    <nav class="flex-1 py-6 flex flex-col gap-2 px-4">
+      
+      <a routerLink="/dashboard/pedidos" 
+         routerLinkActive="bg-indigo-50 text-indigo-600 font-semibold" 
+         [routerLinkActiveOptions]="{exact: true}"
+         class="flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 group">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+             class="w-5 h-5 group-hover:text-indigo-500 transition-colors"
+             [class.text-indigo-600]="true"> <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+        </svg>
+        <span>Órdenes</span>
+      </a>
+
+      <a routerLink="/dashboard/catalogo" 
+         routerLinkActive="bg-indigo-50 text-indigo-600 font-semibold"
+         class="flex items-center gap-3 px-4 py-3 text-gray-600 rounded-xl hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 group">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+             class="w-5 h-5 group-hover:text-indigo-500 transition-colors">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+        </svg>
+        <span>Catálogo</span>
+      </a>
+
+    </nav>
+  </aside>
+
+  <main class="flex-1 flex flex-col overflow-hidden">
+    
+    <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shadow-sm">
+      
+      <div></div>
+
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm">
+            US
+          </div>
+          <span class="text-sm font-medium text-gray-700">Hola, Usuario</span>
+        </div>
+        
+        <button class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+          </svg>
+          Salir
+        </button>
+      </div>
+    </header>
+
+    <section class="flex-1 overflow-y-auto p-8">
+      <div class="max-w-7xl mx-auto">
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+
+  </main>
+
+</div>

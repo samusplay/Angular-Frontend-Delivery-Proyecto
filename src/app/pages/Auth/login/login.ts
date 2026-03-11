@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { NgxSonnerToaster, toast } from 'ngx-sonner';
+import { toast } from 'ngx-sonner';
 import Swal from 'sweetalert2';
 import { LoginService } from './services/login.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule, NgxSonnerToaster],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -67,6 +67,8 @@ export class LoginComponent {
         this.isLoading = false;
         toast.dismiss(toastId); // Importante: cerramos el toast flotante de carga
         this.form.reset();
+        //guardamos el token
+        localStorage.setItem('token', response.token);
 
         // exito
         Swal.fire({
@@ -77,7 +79,7 @@ export class LoginComponent {
           showConfirmButton: false
         }).then(() => {
           // Redirigimos AUTOMÁTICAMENTE cuando se cierra la alerta
-          this.router.navigate([this.returnUrl]);
+          this.router.navigate(['/dashboard']);
         });
       },
       error: (err) => {
