@@ -1,1 +1,59 @@
-<p>verify works!</p>
+<div class="text-center mb-10 mt-4">
+  <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mb-6 lg:hidden">
+    <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    </svg>
+  </div>
+  <h2 class="text-3xl font-extrabold tracking-tight text-slate-900">
+    Verifica tu cuenta
+  </h2>
+  <p class="mt-2 text-sm text-slate-500 px-4">
+    Hemos enviado un código de 6 dígitos a <br>
+    <span class="font-bold text-slate-800">{{ email() }}</span>
+  </p>
+</div>
+
+<form (submit)="onSubmit(); $event.preventDefault()" class="space-y-8">
+  
+  <div class="flex justify-center gap-2 sm:gap-4 dir-ltr">
+    @for (digit of codeDigits(); track $index) {
+      <input 
+        type="text" 
+        inputmode="numeric" 
+        maxlength="1" 
+        [id]="'code-' + $index"
+        [value]="digit"
+        (input)="onInput($event, $index)"
+        (keydown)="onKeyDown($event, $index)"
+        autocomplete="one-time-code"
+        class="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-extrabold text-slate-900 bg-white border border-slate-300 rounded-xl shadow-sm focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 outline-none transition-all placeholder:text-slate-300"
+        placeholder="-"
+      >
+    }
+  </div>
+
+  <button 
+    type="submit" 
+    [disabled]="verifyMutation.isPending()"
+    class="w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-3.5 text-sm font-bold text-white shadow-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+  >
+    @if (verifyMutation.isPending()) {
+      <svg class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span>Verificando...</span>
+    } @else {
+      <span>Confirmar Código</span>
+    }
+  </button>
+</form>
+
+<div class="mt-10 text-center">
+  <p class="text-sm text-slate-600">
+    ¿No recibiste el código o te equivocaste de correo? 
+    <a routerLink="/auth/register" class="font-bold text-indigo-600 hover:text-indigo-500 hover:underline transition-all ml-1 cursor-pointer">
+      Volver al registro
+    </a>
+  </p>
+</div>
