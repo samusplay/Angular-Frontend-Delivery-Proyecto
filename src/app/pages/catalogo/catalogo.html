@@ -1,1 +1,24 @@
-<p>catalogo works!</p>
+<h2>Catalogo</h2>
+
+<table>
+
+<tr *ngFor="let producto of productos">
+
+<td>{{producto.nombre}}</td>
+<td>{{producto.stock}}</td>
+
+<td>
+
+<button (click)="descontar(producto.id)">
+Descontar
+</button>
+
+<button (click)="reponer(producto.id)">
+Reponer
+</button>
+
+</td>
+
+</tr>
+
+</table>
