@@ -1,5 +1,4 @@
-export type CreateResponse={
-//campos dtos
+export type UpdateRequest={
 id:number
 nombre:string
 precio:number
