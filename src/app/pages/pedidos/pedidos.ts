@@ -5,6 +5,7 @@ import { injectMutation, injectQuery, QueryClient } from '@tanstack/angular-quer
 import { lastValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 import { LoginService } from '../Auth/login/services/login.service';
+import { CatalogService } from '../catalogo/services/catalog.service';
 import { CreateOrderRequestDto } from './models/create.order.request.dto';
 import { PedidoService } from './services/pedido.service';
 
@@ -19,7 +20,7 @@ export class PedidosComponent implements OnInit{
   private pedidoService = inject(PedidoService)
   private authService = inject(LoginService)
   //servicio de catalogo
-  //private catalogo
+  private catalogoService=inject(CatalogService)
   //formulario
   private fb = inject(FormBuilder)
   private queryClient = inject(QueryClient)
@@ -86,9 +87,9 @@ export class PedidosComponent implements OnInit{
   //consulta al catalogo para el select
   productsQuery = injectQuery(() => ({
     queryKey: ['products'], //llave del cache
-    // queryFn: () => lastValueFrom(this.catalogoService.getAllProducts())
+     queryFn: () => lastValueFrom(this.catalogoService.obtenerCatalogo())
     //temporal
-    queryFn: () => Promise.resolve([{ id: 1, name: 'Conecta tu servicio aquí', price: 0 }])
+    
   }));
 
   //consulta ordenes(tabla)
@@ -123,7 +124,23 @@ export class PedidosComponent implements OnInit{
     },
     //si succede un error
     onError: (err: any) => {
-      Swal.fire('Error', 'No se pudo crear la orden.', 'error')
+      if (err.status === 409) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Stock Insuficiente',
+          text: 'Uno o más productos en tu carrito ya no tienen stock disponible. Por favor, revisa las cantidades.',
+          confirmButtonColor: '#f59e0b'
+        });
+        
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error del Sistema',
+          text: 'No se pudo crear la orden en este momento. Inténtalo más tarde.',
+          confirmButtonColor: '#ef4444'
+        });
+      }
+
     }
   }));
 
@@ -171,6 +188,18 @@ export class PedidosComponent implements OnInit{
     this.showForm.update(v => !v);
   }
 
+  //metodo buscar el producto segun su id
+  getProductName(productId: number): string {
+    // Obtenemos la lista de productos descargada del catálogo
+    const products = this.productsQuery.data();
+
+    //motsrar id temporalmen
+    if (!products) return `Producto ID: ${productId}`;
+
+    const foundProduct = products.find((p: any) => p.id === productId);
+
+    return foundProduct ? foundProduct.name : `Producto ID: ${productId}`;
+  }
 
 
 }
