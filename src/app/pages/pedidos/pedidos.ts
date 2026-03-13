@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { injectMutation, injectQuery, QueryClient } from '@tanstack/angular-query-experimental';
 import { lastValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
@@ -28,12 +28,36 @@ export class PedidosComponent implements OnInit{
   userId = signal<number>(0);
   showForm = signal<boolean>(false);
 
-  //formulario
+  //formulario con array
   orderForm: FormGroup = this.fb.group({
-    //campos que va poseer el formulario
-    productId: ['', [Validators.required, Validators.min(1)]],
-    quantity: [1, [Validators.required, Validators.min(1)]]
+    items: this.fb.array([this.createItemFormGroup()])
   });
+
+  //controles formulario
+  createItemFormGroup(): FormGroup {
+    return this.fb.group({
+      productId: ['', [Validators.required, Validators.min(1)]],
+      quantity: [1, [Validators.required, Validators.min(1)]]
+    });
+  }
+  //accade al html
+  get itemsFormArray(): FormArray {
+    return this.orderForm.get('items') as FormArray;
+  }
+
+  //agregar producto extra
+  addItem() {
+    this.itemsFormArray.push(this.createItemFormGroup());
+  }
+
+  //eliminar producto
+  removeItem(index: number) {
+    if (this.itemsFormArray.length > 1) {
+      this.itemsFormArray.removeAt(index);
+    }
+  }
+
+  
 
   //obtener datos del Usuario
   ngOnInit() {
@@ -82,8 +106,12 @@ export class PedidosComponent implements OnInit{
     //si es exitoso
     onSuccess: () => {
       this.queryClient.invalidateQueries({ queryKey: ['orders', this.userId()] });
-      this.orderForm.reset({ quantity: 1 });
-      this.showForm.set(false)
+      //reseteo de formarray
+      this.orderForm.reset();
+      this.itemsFormArray.clear();
+      this.itemsFormArray.push(this.createItemFormGroup()); // Agregamos 1 fila limpia
+      
+      this.showForm.set(false);
 
       //excepciones Swal.fire
       Swal.fire({
