@@ -1,32 +1,59 @@
 <p>catalogo works!</p>
 
-<form [formGroup]="productoForm">
+<div class="catalogo-container">
 
-  <div>
-    <label>Nombre</label>
-    <input type="text" formControlName="nombre">
-  </div>
+  <h2 *ngIf="!productId">Crear Producto</h2>
+  <h2 *ngIf="productId">Actualizar Producto</h2>
 
-  <div>
-    <label>Precio</label>
-    <input type="number" formControlName="precio">
-  </div>
+  <form [formGroup]="productoForm" (ngSubmit)="saveProduct()">
 
-  <div>
-    <label>Stock</label>
-    <input type="number" formControlName="stock">
-  </div>
+    <!-- ID solo visible cuando se está editando -->
+    <div *ngIf="productId">
+      <label>ID del producto</label>
+      <input type="text" [value]="productId" readonly>
+    </div>
 
-  <div>
+    <div>
+      <label>Nombre</label>
+      <input 
+        type="text"
+        formControlName="nombre"
+        placeholder="Ingrese nombre del producto"
+      >
+    </div>
 
-    <button type="button" (click)="CreateProduct()">
-      Crear Producto
-    </button>
+    <div>
+      <label>Precio</label>
+      <input 
+        type="number"
+        formControlName="precio"
+        placeholder="Ingrese precio"
+      >
+    </div>
 
-    <button type="button" (click)="UpdateProduct()" [disabled]="!productId">
-      Actualizar Producto
-    </button>
+    <div>
+      <label>Stock</label>
+      <input 
+        type="number"
+        formControlName="stock"
+        placeholder="Ingrese stock"
+      >
+    </div>
 
-  </div>
+    <div class="buttons">
 
-</form>
+      <!-- botón dinámico (Osea que cambia su función dependiendo si hay id o no)-->
+      <button type="submit">
+        {{ productId ? 'Actualizar Producto' : 'Crear Producto' }}
+      </button>
+
+      <!-- botón para limpiar formulario -->
+      <button type="button" (click)="productoForm.reset(); productId = null">
+        Cancelar
+      </button>
+
+    </div>
+
+  </form>
+
+</div>

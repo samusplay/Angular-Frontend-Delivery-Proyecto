@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgxSonnerToaster } from 'ngx-sonner';
@@ -7,6 +7,7 @@ import { CatalogoService } from './services/catalogo.service';
 import { CreateRequest } from './models/CreateRequest';
 import { UpdateRequest } from './models/UpdateRequest';
 import Swal from 'sweetalert2';
+
 @Component({
   
   selector: 'app-catalogo',
@@ -17,7 +18,13 @@ import Swal from 'sweetalert2';
   
 })
 
-export class Catalogo {
+export class Catalogo implements OnInit {
+
+  productos: any[] = [];
+
+  ngOnInit(){
+  this.loadProducts();
+}
   
 // Formulario
   productoForm: FormGroup;
@@ -37,25 +44,33 @@ export class Catalogo {
   }
 
 //Método Crear
-  CreateProduct() {
+ CreateProduct() {
 
-    const request: CreateRequest = this.productoForm.value;
+  const request: CreateRequest = this.productoForm.value;
 
-    this.catalogoService.CreateProduct(request)
-      .subscribe({
-        next: (response) => {
-          console.log("Producto creado", response);
-          this.productoForm.reset();
-        },
-        error: (error) => {
-          console.error("Error al crear producto", error);
-        }
+  this.catalogoService.CreateProduct(request)
+  .subscribe({
+
+    next: () => {
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Producto creado'
       });
 
-  }
+      this.productoForm.reset();
+ //Actualizar la lista
+      this.loadProducts();
+    },
+   //Esta linea es para con sweetAlert pueda leer los errores del backend del globalhandler
+    error: (error) => this.handleError(error)
+
+  });
+
+}
  // Esta variable va porque se espera el id por la url: `${this.endpoint}/${id}/update`
   productId: number | null = null;
-  UpdateProduct(){
+UpdateProduct(){
 
   if(!this.productId) return;
 
@@ -66,10 +81,22 @@ export class Catalogo {
 
   this.catalogoService.UpdateProduct(this.productId, request)
   .subscribe({
+
     next: () => {
-      console.log("Producto actualizado");
-    }
-  }); 
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Producto actualizado'
+      });
+
+      this.loadProducts();
+
+    },
+
+    error: (error) => this.handleError(error)
+
+  });
+
 }
  //Nuevo metodo que necesito para guardar el producto una vez lo edite
  loadProduct(id:number){
@@ -97,6 +124,27 @@ saveProduct(){
   }else{
     this.CreateProduct();
   }
+
+}
+// Metodo para manejar errores
+handleError(error:any){
+
+  const message = error.error?.message || "Error inesperado";
+
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: message
+  });
+
+}
+
+loadProducts(){
+
+  this.catalogoService.findAll()
+  .subscribe(data => {
+    this.productos = data;
+  });
 
 }
 

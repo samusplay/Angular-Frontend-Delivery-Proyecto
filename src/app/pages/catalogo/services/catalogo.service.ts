@@ -37,8 +37,10 @@ findById(id: number): Observable<CreateResponse> {
    const path = `${this.endpoint}/${id}/findById`
   return this.backend.get<CreateResponse>(path)}
 
-findAll(): Observable<CreateResponse> {
-   const path = `${this.endpoint}/all`
-  return this.backend.get<CreateResponse>(path)}
+  //Ver todos
+findAll(): Observable<any[]> {
+  const path = `${this.endpoint}/all`;
+  return this.backend.get<any[]>(path);
+}
 
 }
