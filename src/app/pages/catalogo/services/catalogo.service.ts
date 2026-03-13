@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BackendService } from '../../../../services/backend.service';
-import { CreateRquest } from '../models/CreateRequest';
+import { CreateRequest} from '../models/CreateRequest';
 import { Observable } from 'rxjs';
 import { CreateResponse } from '../models/CreateResponse';
-import { UpdateRequest } from '../Models/UpdateRequest';
+import { UpdateRequest } from '../models/UpdateRequest';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +17,7 @@ export class CatalogoService {
   //crear metodo
   CreateProduct(request:CreateRequest):Observable<CreateResponse>{
     const path=`${this.endpoint}/create`
-    return this.backend.post<CreateRequest>(path,request)
+    return this.backend.post<CreateResponse>(path,request)
 
   }
   //actualizar
@@ -33,3 +33,12 @@ DeleteProduct(id: number): Observable<void> {
 
   //ver por id
 
+findById(id: number): Observable<CreateResponse> {
+   const path = `${this.endpoint}/${id}/findById`
+  return this.backend.get<CreateResponse>(path)}
+
+findAll(): Observable<CreateResponse> {
+   const path = `${this.endpoint}/all`
+  return this.backend.get<CreateResponse>(path)}
+
+}

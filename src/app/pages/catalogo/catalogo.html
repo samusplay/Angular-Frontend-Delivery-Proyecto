@@ -1,1 +1,32 @@
 <p>catalogo works!</p>
+
+<form [formGroup]="productoForm">
+
+  <div>
+    <label>Nombre</label>
+    <input type="text" formControlName="nombre">
+  </div>
+
+  <div>
+    <label>Precio</label>
+    <input type="number" formControlName="precio">
+  </div>
+
+  <div>
+    <label>Stock</label>
+    <input type="number" formControlName="stock">
+  </div>
+
+  <div>
+
+    <button type="button" (click)="CreateProduct()">
+      Crear Producto
+    </button>
+
+    <button type="button" (click)="UpdateProduct()" [disabled]="!productId">
+      Actualizar Producto
+    </button>
+
+  </div>
+
+</form>

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { injectMutation } from '@tanstack/angular-query-experimental';
-import { NgxSonnerToaster, toast } from 'ngx-sonner';
+import { toast } from 'ngx-sonner';
 import { lastValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 import { RegisterService } from './services/register.service';
@@ -11,7 +11,7 @@ import { RegisterService } from './services/register.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterModule, NgxSonnerToaster],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrl: './register.scss',
 })
