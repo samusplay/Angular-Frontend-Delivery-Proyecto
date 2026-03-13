@@ -1,46 +1,50 @@
 <div class="titulo-container">
-
   <div class="linea"></div>
-
-  <h2 class="titulo">
-    CATÁLOGO DE PRODUCTOS
-  </h2>
-
+  <h2 class="titulo">CATÁLOGO DE PRODUCTOS</h2>
   <div class="linea"></div>
-
 </div>
 
-<div class="catalogo-container">
+<div class="tabla-container">
 
-  <div class="producto-card" *ngFor="let producto of productos">
+<table class="tabla-catalogo">
 
-    <div class="producto-id">
-      ID: {{producto.id}}
-    </div>
+<thead>
+<tr>
+<th>ID</th>
+<th>Producto</th>
+<th>Precio</th>
+<th>Stock</th>
+<th>Acciones</th>
+</tr>
+</thead>
 
-    <h3 class="producto-nombre">
-      {{producto.name}}
-    </h3>
+<tbody>
 
-    <div class="producto-info">
-      <p>💰 Precio: {{producto.precio}}</p>
-      <p>📦 Stock: {{producto.Stock}}</p>
-    </div>
+<tr *ngFor="let producto of productos">
 
-    <div class="acciones">
+<td class="id">{{producto.id}}</td>
+<td class="nombre">{{producto.name}}</td>
+<td class="precio">$ {{producto.precio}}</td>
+<td class="stock">{{producto.Stock}}</td>
 
-      <button class="btn-descontar"
-      (click)="descontar(producto.id)">
-        ➖ Descontar
-      </button>
+<td class="acciones">
 
-      <button class="btn-reponer"
-      (click)="reponer(producto.id)">
-        ➕ Reponer
-      </button>
+<button class="btn-descontar"
+(click)="descontar(producto.id)">
+➖ Descontar
+</button>
 
-    </div>
+<button class="btn-reponer"
+(click)="reponer(producto.id)">
+➕ Reponer
+</button>
 
-  </div>
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 </div>
