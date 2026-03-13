@@ -22,44 +22,40 @@ export class CatalogoComponent implements OnInit {
   }
 
   cargarCatalogo() {
-    this.catalogService.obtenerCatalogo().subscribe({
-      next: (data: any) => {
-        this.productos = data;
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+
+  this.catalogService.obtenerCatalogo()
+  .subscribe(data => {
+
+    this.productos = data.sort((a, b) => a.id - b.id);
+
+  });
+
+}
 
   descontar(id: number) {
 
-    const cantidad = 1;
+  this.catalogService.descontarStock(id, 1)
+  .subscribe(() => {
 
-    this.catalogService.descontarStock(id, cantidad).subscribe({
-      next: () => {
-        alert("Stock descontado correctamente");
-        this.cargarCatalogo();
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+    console.log("Stock descontado");
 
-  reponer(id: number) {
+    this.cargarCatalogo();
 
-    const cantidad = 1;
+  });
 
-    this.catalogService.reponerStock(id, cantidad).subscribe({
-      next: () => {
-        alert("Stock repuesto correctamente");
-        this.cargarCatalogo();
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
-  }
+}
 
+
+reponer(id: number) {
+
+  this.catalogService.reponerStock(id, 1)
+  .subscribe(() => {
+
+    console.log("Stock repuesto");
+
+    this.cargarCatalogo();
+
+  });
+
+}
 }
