@@ -43,7 +43,7 @@ obtenerCatalogo() {
 
     const path = `${this.endpoint}/${id}/descontar`
 
-    return this.backend.post(path, {
+    return this.backend.put(path, {
       cantidad: cantidad
     })
   }
@@ -53,7 +53,7 @@ obtenerCatalogo() {
 
     const path = `${this.endpoint}/${id}/reponer`
 
-    return this.backend.post(path, {
+    return this.backend.put(path, {
       cantidad: cantidad
     })
   }
