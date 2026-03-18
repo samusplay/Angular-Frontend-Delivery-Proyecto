@@ -1,1 +1,167 @@
-<p>pedidos works!</p>
+<div class="p-6 max-w-6xl mx-auto font-sans">
+
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-slate-800">Mis Pedidos</h1>
+            <p class="text-slate-500 mt-1">Gestiona tus órdenes y el detalle de tus productos.</p>
+        </div>
+
+        <button (click)="toggleForm()"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            {{ showForm() ? 'Cancelar Creación' : 'Nueva Orden' }}
+        </button>
+    </div>
+
+    @if (showForm()) {
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8 transition-all">
+        <h2 class="text-lg font-semibold text-slate-800 mb-4">Detalles del Nuevo Pedido</h2>
+
+        <form [formGroup]="orderForm" (ngSubmit)="onSubmitCreate()" class="flex flex-col gap-4">
+
+            <div formArrayName="items" class="flex flex-col gap-3">
+
+                @for (itemCtrl of itemsFormArray.controls; track $index; let i = $index) {
+
+                <div [formGroupName]="i"
+                    class="flex gap-4 items-end bg-slate-50 p-4 rounded-lg border border-slate-100 relative">
+
+                    <div class="flex-1">
+                        <label class="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Producto
+                            {{ i + 1 }}</label>
+                        <select formControlName="productId"
+                            class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
+                            <option value="" disabled selected>Selecciona un producto...</option>
+
+                            @for (product of productsQuery.data(); track product.id) {
+                            <option [value]="product.id">{{ product.name }}</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="w-32">
+                        <label
+                            class="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Cantidad</label>
+                        <input type="number" formControlName="quantity" min="1"
+                            class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white">
+                    </div>
+
+                    @if (itemsFormArray.length > 1) {
+                    <button type="button" (click)="removeItem(i)"
+                        class="mb-2 p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Quitar producto">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                    }
+                </div>
+                }
+            </div>
+
+            <div class="flex justify-between items-center mt-4 pt-4 border-t border-slate-100">
+
+                <button type="button" (click)="addItem()"
+                    class="text-indigo-600 hover:text-indigo-800 font-medium text-sm flex items-center gap-1 transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Agregar otro producto
+                </button>
+
+                <button type="submit" [disabled]="createMutation.isPending() || orderForm.invalid"
+                    class="bg-green-600 hover:bg-green-700 disabled:bg-slate-400 text-white px-8 py-2.5 rounded-lg font-medium transition-colors flex items-center gap-2 shadow-sm">
+                    @if (createMutation.isPending()) {
+                    <span
+                        class="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full"></span>
+                    Procesando...
+                    } @else {
+                    Confirmar Orden
+                    }
+                </button>
+            </div>
+        </form>
+
+    </div>
+    }
+
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+
+        @if (orderQuery.isLoading()) {
+        <div class="p-8 text-center text-slate-500 flex flex-col items-center justify-center">
+            <span
+                class="animate-spin inline-block w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full mb-4"></span>
+            Cargando tus pedidos...
+        </div>
+        }
+        @else if (orderQuery.isError()) {
+        <div class="p-8 text-center text-red-500">
+            <p class="font-medium">Ocurrió un error al cargar las órdenes.</p>
+            <button (click)="orderQuery.refetch()" class="mt-2 text-indigo-600 hover:underline">Reintentar</button>
+        </div>
+        }
+        @else {
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-slate-50 text-slate-600 text-sm uppercase tracking-wider border-b border-slate-200">
+                    <th class="p-4 font-medium"># Orden</th>
+                    <th class="p-4 font-medium">Detalle de Productos</th>
+                    <th class="p-4 font-medium text-center">Estado</th>
+                    <th class="p-4 font-medium text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+
+                @if (orderQuery.data()?.length === 0) {
+                <tr>
+                    <td colspan="4" class="p-8 text-center text-slate-500">
+                        Aún no tienes pedidos registrados. ¡Crea el primero!
+                    </td>
+                </tr>
+                }
+
+                @for (order of orderQuery.data(); track order.id) {
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="p-4 font-semibold text-slate-800">ORD-{{ order.id }}</td>
+
+                    <td class="p-4">
+                        <ul class="space-y-1">
+                            @for (item of order.items; track item.productId) {
+                            <li class="text-sm text-slate-600 flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                                <span class="font-medium text-slate-700">{{ item.quantity }}x</span>
+                                {{ getProductName(item.productId) }}
+                            </li>
+                            }
+                        </ul>
+                    </td>
+
+                    <td class="p-4 text-center">
+                        <span class="px-3 py-1 text-xs font-semibold rounded-full inline-block" [ngClass]="{
+                        'bg-yellow-100 text-yellow-800': order.status === 'PENDING',
+                        'bg-green-100 text-green-800': order.status === 'APPROVED',
+                        'bg-red-100 text-red-800': order.status === 'CANCELLED',
+                        'bg-slate-200 text-slate-800': order.status === 'REJECTED'
+                      }">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        @if (order.status === 'PENDING') {
+                        <button (click)="onCancelClick(order.id)" [disabled]="cancelMutation.isPending()"
+                            class="text-red-500 hover:text-red-700 hover:bg-red-50 px-3 py-1.5 rounded-md font-medium text-sm transition-colors">
+                            Cancelar
+                        </button>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        }
+    </div>
+</div>

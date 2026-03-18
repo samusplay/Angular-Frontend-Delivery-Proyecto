@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { BackendService } from '../../../../services/backend.service';
 import { CreateRequest } from '../models/CreateRequest';
-import { Observable } from 'rxjs';
 import { CreateResponse } from '../models/CreateResponse';
 import { UpdateRequest } from '../models/UpdateRequest';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -33,9 +34,16 @@ export class CatalogService {
   }
 
   // obtener catalogo
-obtenerCatalogo() {
+obtenerCatalogo(): Observable<any[]> {
   const path = `${this.endpoint}/all`
-  return this.backend.get<any[]>(path)
+  return this.backend.get<any[]>(path).pipe(
+    map((data: any[]) =>
+      data.map(p => ({
+        ...p,
+        stock: p.cantidad
+      }))
+    )
+  )
 }
 
   // DESCONTAR STOCK
